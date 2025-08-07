@@ -239,6 +239,14 @@ export default function SouthAfricaMap({
           onCityClick(city);
         }
       };
+
+      // Hide Leaflet attribution
+      const attributionElements = document.querySelectorAll(
+        '.leaflet-control-attribution'
+      );
+      attributionElements.forEach((element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
     };
 
     initMap();
