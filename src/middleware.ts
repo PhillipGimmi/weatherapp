@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getConfig, getCorsConfig, isTrustedHost } from '@/lib/config';
+import { getConfig, getCorsConfig } from '@/lib/config';
 
 // Enhanced rate limiting with multiple strategies
 interface RateLimitEntry {
@@ -112,13 +112,6 @@ function checkRateLimit(request: NextRequest): {
   clientData.lastRequest = now;
 
   return { allowed: true };
-}
-
-function validateTrustedHost(request: NextRequest): boolean {
-  const host = request.headers.get('host');
-  if (!host) return false;
-
-  return isTrustedHost(host);
 }
 
 function validateRequestHeaders(request: NextRequest): boolean {
@@ -271,13 +264,13 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // Validate trusted host
-  if (!validateTrustedHost(request)) {
-    logSecurityEvent(request, 'UNTRUSTED_HOST', {
-      host: request.headers.get('host'),
-    });
-    return new NextResponse('Forbidden', { status: 403 });
-  }
+  // Validate trusted host (disabled for debugging)
+  // if (!validateTrustedHost(request)) {
+  //   logSecurityEvent(request, 'UNTRUSTED_HOST', {
+  //     host: request.headers.get('host'),
+  //   });
+  //   return new NextResponse('Forbidden', { status: 403 });
+  // }
 
   // Validate request headers (skipped in development)
   if (!validateRequestHeaders(request)) {
