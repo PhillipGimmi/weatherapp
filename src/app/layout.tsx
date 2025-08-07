@@ -18,15 +18,6 @@ export const metadata: Metadata = {
   title: 'Weather App - South Africa',
   description:
     'A beautiful mobile-first weather application for South Africa with real-time weather data and interactive map',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'Weather App',
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  manifest: '/manifest.json',
 };
 
 export const viewport: Viewport = {
@@ -49,12 +40,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Weather App" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#000000" />
-        <meta name="msapplication-tap-highlight" content="no" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
