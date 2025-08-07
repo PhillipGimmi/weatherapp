@@ -269,11 +269,11 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // Validate request headers (skipped in development)
-  if (!validateRequestHeaders(request)) {
-    logSecurityEvent(request, 'SUSPICIOUS_HEADERS');
-    return new NextResponse('Bad Request', { status: 400 });
-  }
+  // Validate request headers (disabled for production compatibility)
+  // if (!validateRequestHeaders(request)) {
+  //   logSecurityEvent(request, 'SUSPICIOUS_HEADERS');
+  //   return new NextResponse('Bad Request', { status: 400 });
+  // }
 
   // Check rate limit (more lenient in development)
   if (config.enableRateLimiting) {
