@@ -250,77 +250,8 @@ function logSecurityEvent(
 }
 
 export function middleware(request: NextRequest) {
-  const config = getConfig();
-
-  // Log request if enabled
-  if (config.enableRequestLogging) {
-    console.log(
-      `${new Date().toISOString()} - ${request.method} ${request.url}`,
-      {
-        userAgent: request.headers.get('user-agent'),
-        ip: getClientIdentifier(request),
-        referer: request.headers.get('referer'),
-      }
-    );
-  }
-
-  // Validate trusted host (disabled for debugging)
-  // if (!validateTrustedHost(request)) {
-  //   logSecurityEvent(request, 'UNTRUSTED_HOST', {
-  //     host: request.headers.get('host'),
-  //   });
-  //   return new NextResponse('Forbidden', { status: 403 });
-  // }
-
-  // Validate request headers (skipped in development)
-  if (!validateRequestHeaders(request)) {
-    logSecurityEvent(request, 'SUSPICIOUS_HEADERS');
-    return new NextResponse('Bad Request', { status: 400 });
-  }
-
-  // Check rate limit (more lenient in development)
-  if (config.enableRateLimiting) {
-    const rateLimitResult = checkRateLimit(request);
-    if (!rateLimitResult.allowed) {
-      logSecurityEvent(request, 'RATE_LIMIT_EXCEEDED', {
-        retryAfter: rateLimitResult.retryAfter,
-        blockRemaining: rateLimitResult.blockRemaining,
-      });
-
-      const response = new NextResponse(
-        JSON.stringify({
-          error: 'Rate limit exceeded',
-          retryAfter: rateLimitResult.retryAfter,
-          blockRemaining: rateLimitResult.blockRemaining,
-          message: 'Too many requests, please try again later.',
-        }),
-        {
-          status: 429,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-
-      if (rateLimitResult.retryAfter) {
-        response.headers.set(
-          'Retry-After',
-          rateLimitResult.retryAfter.toString()
-        );
-      }
-
-      return response;
-    }
-  }
-
-  // Continue with the request
-  const response = NextResponse.next();
-
-  // Add security headers
-  addSecurityHeaders(response);
-
-  // Handle CORS
-  handleCors(request, response);
-
-  return response;
+  // Temporarily disable all middleware for debugging
+  return NextResponse.next();
 }
 
 export const config = {
